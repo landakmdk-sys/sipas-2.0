@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIPAS – Sistem Informasi Persampahan Kabupaten Donggala</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{--green-deep:#1a4a2e;--green-mid:#2d7a4f;--green-bright:#4caf50;--green-light:#a8e6b8;--green-pale:#e8f5ec;--amber:#f59e0b;--red-soft:#ef4444;--red-pale:#fee2e2;--blue-soft:#3b82f6;--blue-pale:#dbeafe;--orange:#f97316;--orange-pale:#ffedd5;--cream:#fafaf7;--text-dark:#1a2e1f;--text-mid:#3d5c47;--text-soft:#6b8a74;--shadow-sm:0 2px 8px rgba(26,74,46,0.08);--shadow-md:0 8px 32px rgba(26,74,46,0.12);--radius:16px;--radius-sm:10px;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--text-dark);line-height:1.6;overflow-x:hidden;}
+  nav{position:sticky;top:0;z-index:100;background:rgba(250,250,247,0.93);backdrop-filter:blur(12px);border-bottom:1px solid rgba(26,74,46,0.08);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:64px;}
+  .nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:0.95rem;color:var(--green-deep);text-decoration:none;}
+  .nav-logo .icon{width:36px;height:36px;background:var(--green-mid);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+  .nav-links{display:flex;gap:2px;list-style:none;}
+  .nav-links a{text-decoration:none;color:var(--text-mid);font-size:0.82rem;font-weight:500;padding:6px 11px;border-radius:8px;transition:all 0.2s;}
+  .nav-links a:hover{background:var(--green-pale);color:var(--green-deep);}
+  .nav-cta{background:var(--green-mid);color:white!important;border-radius:20px!important;}
+  .hero{position:relative;min-height:88vh;display:flex;align-items:center;overflow:hidden;padding:80px 40px;}
+  .hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,var(--green-deep) 0%,#1e5c38 60%,#2d7a4f 100%);}
+  .hero-pattern{position:absolute;inset:0;background-image:radial-gradient(circle at 20% 50%,rgba(76,175,80,0.15) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(168,230,184,0.1) 0%,transparent 40%);}
+  .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:40px 40px;}
+  .hero-content{position:relative;max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;}
+  .hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:var(--green-light);font-size:0.75rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:6px 14px;border-radius:20px;margin-bottom:20px;}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,3.4vw,3rem);color:white;line-height:1.12;margin-bottom:16px;}
+  .hero h1 em{font-style:italic;color:var(--green-light);}
+  .hero p{color:rgba(255,255,255,0.72);font-size:0.95rem;max-width:440px;margin-bottom:32px;line-height:1.7;}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+  .btn-primary{background:white;color:var(--green-deep);padding:12px 24px;border-radius:30px;font-weight:700;font-size:0.88rem;text-decoration:none;border:none;cursor:pointer;transition:all 0.25s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,0.2);}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-outline{background:transparent;color:white;padding:12px 24px;border-radius:30px;font-weight:600;font-size:0.88rem;text-decoration:none;border:1.5px solid rgba(255,255,255,0.4);cursor:pointer;transition:all 0.25s;display:inline-flex;align-items:center;gap:8px;}
+  .btn-outline:hover{border-color:white;background:rgba(255,255,255,0.1);}
+  .hero-right{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .hero-stat-card{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:var(--radius);padding:22px 18px;backdrop-filter:blur(8px);animation:floatCard 4s ease-in-out infinite;}
+  .hero-stat-card:nth-child(2){animation-delay:0.5s;margin-top:18px;}
+  .hero-stat-card:nth-child(3){animation-delay:1s;}
+  .hero-stat-card:nth-child(4){animation-delay:1.5s;margin-top:18px;}
+  @keyframes floatCard{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+  .hero-stat-card .emoji{font-size:1.8rem;margin-bottom:8px;display:block;}
+  .hero-stat-card .num{font-family:'DM Serif Display',serif;font-size:1.7rem;color:white;display:block;}
+  .hero-stat-card .label{color:rgba(255,255,255,0.65);font-size:0.75rem;font-weight:500;}
+  section{padding:72px 40px;}
+  .container{max-width:1200px;margin:0 auto;}
+  .section-header{text-align:center;margin-bottom:48px;}
+  .section-tag{display:inline-block;background:var(--green-pale);color:var(--green-mid);font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:12px;}
+  .section-tag.red{background:var(--red-pale);color:#b91c1c;}
+  .section-tag.orange{background:var(--orange-pale);color:#c2410c;}
+  .section-header h2{font-family:'DM Serif Display',serif;font-size:clamp(1.7rem,2.8vw,2.4rem);color:var(--green-deep);margin-bottom:12px;}
+  .section-header p{color:var(--text-soft);font-size:0.95rem;max-width:540px;margin:0 auto;}
+  .stats-strip{background:white;padding:0 40px;border-top:1px solid rgba(26,74,46,0.06);border-bottom:1px solid rgba(26,74,46,0.06);}
+  .stats-strip .container{display:grid;grid-template-columns:repeat(4,1fr);}
+  .stat-item{padding:28px 20px;text-align:center;border-right:1px solid var(--green-pale);}
+  .stat-item:last-child{border-right:none;}
+  .stat-item .num{font-family:'DM Serif Display',serif;font-size:2.2rem;color:var(--green-mid);display:block;line-height:1;margin-bottom:4px;}
+  .stat-item .num.red{color:#dc2626;}
+  .stat-item .label{color:var(--text-soft);font-size:0.8rem;font-weight:500;}
+
+  /* ANALISIS */
+  .analisis-section{background:var(--green-deep);}
+  .analisis-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:28px;}
+  .analisis-card{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius);padding:26px;}
+  .analisis-card h3{font-family:'DM Serif Display',serif;font-size:1.15rem;color:white;margin-bottom:16px;}
+  .bar-wrap{margin-bottom:12px;}
+  .bar-label{display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:4px;}
+  .bar-label span:first-child{color:rgba(255,255,255,0.7);}
+  .bar-label span:last-child{color:white;font-weight:700;}
+  .bar-track{background:rgba(255,255,255,0.1);border-radius:99px;height:9px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:99px;}
+  .bar-fill.green{background:var(--green-bright);}
+  .bar-fill.red{background:#ef4444;}
+  .bar-fill.amber{background:#f59e0b;}
+  .analisis-note{background:rgba(255,255,255,0.06);border-left:3px solid var(--green-bright);border-radius:0 8px 8px 0;padding:12px 16px;margin-top:12px;font-size:0.8rem;color:rgba(255,255,255,0.72);line-height:1.6;}
+  .analisis-note strong{color:white;}
+  .gap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .gap-card{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-sm);padding:18px;}
+  .gap-card .icon-wrap{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:10px;}
+  .gap-card .icon-wrap.red{background:rgba(239,68,68,0.2);}
+  .gap-card .icon-wrap.amber{background:rgba(245,158,11,0.2);}
+  .gap-card h4{font-size:0.88rem;font-weight:700;color:white;margin-bottom:5px;}
+  .gap-card p{font-size:0.76rem;color:rgba(255,255,255,0.62);line-height:1.5;}
+  .gap-badge{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:7px;}
+  .gap-badge.kritis{background:rgba(239,68,68,0.3);color:#fca5a5;}
+  .gap-badge.sedang{background:rgba(245,158,11,0.3);color:#fcd34d;}
+
+  /* KESEHATAN */
+  .kesehatan-section{background:#fff8f6;}
+  .penyakit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:28px;}
+  .penyakit-card{background:white;border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm);border-top:4px solid var(--red-soft);}
+  .penyakit-card.medium{border-top-color:var(--orange);}
+  .penyakit-card.low{border-top-color:var(--amber);}
+  .penyakit-card .risk{display:inline-block;font-size:0.68rem;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:10px;}
+  .penyakit-card .risk.tinggi{background:#fee2e2;color:#b91c1c;}
+  .penyakit-card .risk.sedang{background:#ffedd5;color:#c2410c;}
+  .penyakit-card .risk.rendah{background:#fef9c3;color:#854d0e;}
+  .penyakit-card h4{font-weight:700;font-size:0.92rem;color:var(--text-dark);margin-bottom:7px;}
+  .penyakit-card p{color:var(--text-soft);font-size:0.8rem;line-height:1.6;}
+  .penyakit-card .vektor{margin-top:8px;font-size:0.73rem;color:var(--red-soft);font-weight:600;}
+  .dampak-box{background:white;border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm);display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:28px;}
+  .dampak-item{text-align:center;padding:14px;}
+  .dampak-item .angka{font-family:'DM Serif Display',serif;font-size:2rem;color:#dc2626;}
+  .dampak-item .desc{font-size:0.76rem;color:var(--text-soft);margin-top:4px;}
+  .rekomendasi-box{background:white;border-radius:var(--radius);padding:26px;box-shadow:var(--shadow-sm);border-left:5px solid var(--red-soft);}
+  .rekomendasi-box h3{font-weight:700;color:#b91c1c;margin-bottom:14px;font-size:0.95rem;}
+  .rek-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .rek-col h4{font-weight:700;font-size:0.85rem;color:var(--text-dark);margin-bottom:8px;}
+  .rek-col ul{list-style:none;display:flex;flex-direction:column;gap:5px;}
+  .rek-col ul li{font-size:0.78rem;color:var(--text-soft);}
+  .rek-col ul li::before{content:'→ ';}
+
+  /* SARPRAS */
+  .sarpras-section{background:white;}
+  .sarpras-table{width:100%;border-collapse:collapse;margin-bottom:32px;font-size:0.82rem;}
+  .sarpras-table th{background:var(--green-deep);color:white;padding:11px 14px;text-align:left;font-size:0.8rem;font-weight:600;}
+  .sarpras-table td{padding:11px 14px;border-bottom:1px solid var(--green-pale);}
+  .sarpras-table tr:hover td{background:var(--green-pale);}
+  .badge-ada{background:#dcfce7;color:#166534;font-size:0.7rem;font-weight:700;padding:2px 9px;border-radius:20px;}
+  .badge-kurang{background:#fee2e2;color:#b91c1c;font-size:0.7rem;font-weight:700;padding:2px 9px;border-radius:20px;}
+  .badge-tdk{background:#fef9c3;color:#854d0e;font-size:0.7rem;font-weight:700;padding:2px 9px;border-radius:20px;}
+  .kebutuhan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .kebutuhan-card{border-radius:var(--radius);padding:22px;border:1.5px solid;}
+  .kebutuhan-card.urgent{background:#fff1f2;border-color:#fca5a5;}
+  .kebutuhan-card.penting{background:#fff7ed;border-color:#fdba74;}
+  .kebutuhan-card.rencana{background:#f0fdf4;border-color:#86efac;}
+  .kebutuhan-card h4{font-weight:700;font-size:0.9rem;margin-bottom:10px;}
+  .kebutuhan-card.urgent h4{color:#9f1239;}
+  .kebutuhan-card.penting h4{color:#9a3412;}
+  .kebutuhan-card.rencana h4{color:#166534;}
+  .kebutuhan-card ul{list-style:none;display:flex;flex-direction:column;gap:6px;}
+  .kebutuhan-card ul li{font-size:0.78rem;color:var(--text-mid);}
+  .kebutuhan-card ul li::before{content:'→ ';}
+
+  /* JADWAL */
+  .jadwal-section{background:var(--green-pale);}
+  .jadwal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;}
+  .jadwal-day{background:white;border-radius:var(--radius-sm);padding:14px 10px;text-align:center;box-shadow:var(--shadow-sm);}
+  .jadwal-day.active{background:var(--green-mid);color:white;transform:translateY(-4px);box-shadow:var(--shadow-md);}
+  .jadwal-day .day-name{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;opacity:0.6;}
+  .jadwal-day.active .day-name{opacity:0.85;}
+  .jadwal-day .day-icon{font-size:1.6rem;display:block;margin-bottom:5px;}
+  .jadwal-day .day-type{font-size:0.68rem;font-weight:600;color:var(--text-soft);}
+  .jadwal-day.active .day-type{color:rgba(255,255,255,0.85);}
+  .jadwal-info{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px;}
+  .info-card{background:white;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-sm);display:flex;gap:12px;align-items:flex-start;}
+  .info-icon{width:40px;height:40px;background:var(--green-pale);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+  .info-card h4{font-weight:700;font-size:0.88rem;color:var(--text-dark);margin-bottom:3px;}
+  .info-card p{color:var(--text-soft);font-size:0.78rem;line-height:1.5;}
+
+  /* JENIS */
+  .jenis-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .jenis-card{background:white;border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm);border:1px solid transparent;transition:all 0.3s;position:relative;overflow:hidden;}
+  .jenis-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;}
+  .jenis-card.organik::before{background:var(--green-bright);}
+  .jenis-card.anorganik::before{background:var(--blue-soft);}
+  .jenis-card.b3::before{background:var(--red-soft);}
+  .jenis-card.daur-ulang::before{background:var(--amber);}
+  .jenis-card.residu::before{background:#8b5cf6;}
+  .jenis-card.elektronik::before{background:#06b6d4;}
+  .jenis-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
+  .jenis-icon{width:50px;height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:12px;}
+  .jenis-card.organik .jenis-icon{background:#dcfce7;}
+  .jenis-card.anorganik .jenis-icon{background:#dbeafe;}
+  .jenis-card.b3 .jenis-icon{background:#fee2e2;}
+  .jenis-card.daur-ulang .jenis-icon{background:#fef3c7;}
+  .jenis-card.residu .jenis-icon{background:#ede9fe;}
+  .jenis-card.elektronik .jenis-icon{background:#cffafe;}
+  .jenis-card h3{font-size:0.98rem;font-weight:700;color:var(--text-dark);margin-bottom:6px;}
+  .jenis-card p{color:var(--text-soft);font-size:0.8rem;line-height:1.6;margin-bottom:10px;}
+  .jenis-examples{display:flex;flex-wrap:wrap;gap:4px;}
+  .tag{background:var(--green-pale);color:var(--green-mid);font-size:0.68rem;font-weight:600;padding:2px 9px;border-radius:20px;}
+
+  /* STEPS */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;}
+  .steps::before{content:'';position:absolute;top:40px;left:12%;right:12%;height:2px;background:linear-gradient(90deg,var(--green-light),var(--green-mid));z-index:0;}
+  .step{text-align:center;padding:0 12px;position:relative;z-index:1;}
+  .step-num{width:50px;height:50px;background:var(--green-mid);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:1.3rem;margin:0 auto 16px;box-shadow:0 0 0 6px var(--cream),0 0 0 8px var(--green-light);}
+  .step h4{font-weight:700;color:var(--green-deep);margin-bottom:5px;font-size:0.9rem;}
+  .step p{color:var(--text-soft);font-size:0.78rem;line-height:1.6;}
+
+  /* PROGRAM */
+  .program-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .program-card{background:white;border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm);border-left:4px solid var(--green-mid);transition:all 0.3s;}
+  .program-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
+  .program-card .icon{font-size:1.7rem;margin-bottom:10px;display:block;}
+  .program-card h4{font-weight:700;font-size:0.9rem;color:var(--text-dark);margin-bottom:5px;}
+  .program-card p{color:var(--text-soft);font-size:0.78rem;line-height:1.6;}
+
+  /* KONTAK */
+  .kontak-section{background:var(--green-deep);}
+  .kontak-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:start;}
+  .kontak-left h2{font-family:'DM Serif Display',serif;font-size:2rem;color:white;margin-bottom:14px;}
+  .kontak-left p{color:rgba(255,255,255,0.65);font-size:0.9rem;margin-bottom:26px;}
+  .kontak-items{display:flex;flex-direction:column;gap:13px;}
+  .kontak-item{display:flex;gap:12px;align-items:center;}
+  .kontak-item-icon{width:40px;height:40px;background:rgba(255,255,255,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+  .kontak-item span{color:rgba(255,255,255,0.85);font-size:0.86rem;}
+  .kontak-item strong{color:white;display:block;font-size:0.8rem;margin-bottom:1px;}
+  .kontak-form{background:white;border-radius:var(--radius);padding:30px;}
+  .kontak-form h3{font-weight:700;color:var(--green-deep);margin-bottom:18px;font-size:1rem;}
+  .form-group{margin-bottom:14px;}
+  .form-group label{display:block;font-size:0.75rem;font-weight:600;color:var(--text-mid);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.05em;}
+  .form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 12px;border:1.5px solid rgba(26,74,46,0.15);border-radius:var(--radius-sm);font-family:inherit;font-size:0.87rem;color:var(--text-dark);background:var(--cream);transition:all 0.2s;outline:none;}
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--green-mid);background:white;box-shadow:0 0 0 3px rgba(45,122,79,0.1);}
+  .form-group textarea{resize:vertical;min-height:75px;}
+  .btn-submit{width:100%;background:#25D366;color:white;border:none;padding:12px;border-radius:10px;font-family:inherit;font-size:0.9rem;font-weight:700;cursor:pointer;transition:all 0.25s;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .btn-submit:hover{background:#128C7E;transform:translateY(-1px);}
+  .wa-note{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:9px 13px;margin-top:9px;font-size:0.75rem;color:#166534;text-align:center;}
+  footer{background:#0f2e1c;color:rgba(255,255,255,0.5);text-align:center;padding:24px 40px;font-size:0.8rem;}
+  footer strong{color:rgba(255,255,255,0.85);}
+  @media(max-width:900px){
+    .hero-content,.analisis-grid,.kontak-grid{grid-template-columns:1fr;gap:28px;}
+    .hero-right{grid-template-columns:repeat(2,1fr);}
+    .hero-stat-card:nth-child(2),.hero-stat-card:nth-child(4){margin-top:0;}
+    .stats-strip .container{grid-template-columns:repeat(2,1fr);}
+    .jenis-grid,.penyakit-grid,.program-grid,.kebutuhan-grid,.gap-grid{grid-template-columns:1fr 1fr;}
+    .jadwal-grid{grid-template-columns:repeat(4,1fr);}
+    .steps,.dampak-box,.rek-grid{grid-template-columns:1fr;}
+    .steps::before{display:none;}
+    nav{padding:0 20px;}
+    .nav-links{display:none;}
+    section{padding:52px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="icon">♻️</div>
+    <div><div>SIPAS Donggala</div><div style="font-size:0.65rem;font-weight:400;color:var(--text-soft);">DLH Kab. Donggala</div></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#analisis">Analisis</a></li>
+    <li><a href="#kesehatan">Dampak Kesehatan</a></li>
+    <li><a href="#sarpras">Sarpras</a></li>
+    <li><a href="#jadwal">Jadwal</a></li>
+    <li><a href="#jenis">Edukasi</a></li>
+    <li><a href="#program">Program</a></li>
+    <li><a href="#kontak" class="nav-cta">📲 Lapor WA</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div><div class="hero-pattern"></div><div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-badge">🌿 Dinas Lingkungan Hidup Kab. Donggala</div>
+      <h1>Sistem Informasi <em>Persampahan</em> Kabupaten Donggala</h1>
+      <p>Data resmi DLH Kabupaten Donggala — jadwal angkut, analisis data, dampak kesehatan, kebutuhan sarpras, dan pelaporan masalah langsung via WhatsApp.</p>
+      <div class="hero-actions">
+        <a href="#jadwal" class="btn-primary">📅 Jadwal Angkut</a>
+        <a href="#kontak" class="btn-outline">📲 Lapor via WhatsApp</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-stat-card"><span class="emoji">👥</span><span class="num">43.428</span><span class="label">Jiwa Terlayani (14,33%)</span></div>
+      <div class="hero-stat-card"><span class="emoji">⚠️</span><span class="num">81,2%</span><span class="label">Sampah Tidak Terkelola</span></div>
+      <div class="hero-stat-card"><span class="emoji">🚛</span><span class="num">36 ton</span><span class="label">Tertangani per Hari</span></div>
+      <div class="hero-stat-card"><span class="emoji">📊</span><span class="num">192,69 t</span><span class="label">Potensi Timbulan/Hari</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="container">
+    <div class="stat-item"><span class="num">308.000</span><span class="label">Total Penduduk Kab. Donggala</span></div>
+    <div class="stat-item"><span class="num">192,69 t</span><span class="label">Potensi Timbulan / Hari</span></div>
+    <div class="stat-item"><span class="num red">156,69 t</span><span class="label">Sampah Tak Tertangani / Hari</span></div>
+    <div class="stat-item"><span class="num">6 / 16</span><span class="label">Kecamatan Terlayani</span></div>
+  </div>
+</div>
+
+<!-- ANALISIS DATA -->
+<section id="analisis" class="analisis-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag" style="background:rgba(255,255,255,0.12);color:var(--green-light);">Analisis Data</span>
+      <h2 style="color:white;">Analisis Pengelolaan Sampah Kab. Donggala</h2>
+      <p style="color:rgba(255,255,255,0.62);">Berdasarkan data SIFSN, PTMP, dan evaluasi DLH Kabupaten Donggala tahun 2024.</p>
+    </div>
+    <div class="analisis-grid">
+      <div class="analisis-card">
+        <h3>📊 Capaian vs Target JAKSTRADA 2024</h3>
+        <div class="bar-wrap"><div class="bar-label"><span>Penanganan — Target 71%</span><span style="color:#fca5a5;">Capaian 15,54%</span></div><div class="bar-track"><div class="bar-fill red" style="width:21.9%"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Pengurangan — Target 28%</span><span style="color:#fcd34d;">Capaian 3,35%</span></div><div class="bar-track"><div class="bar-fill amber" style="width:11.9%"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Sampah Terkelola</span><span style="color:#86efac;">18,89%</span></div><div class="bar-track"><div class="bar-fill green" style="width:18.89%"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Sampah Tidak Terkelola</span><span style="color:#fca5a5;">81,2%</span></div><div class="bar-track"><div class="bar-fill red" style="width:81.2%"></div></div></div>
+        <div class="analisis-note"><strong>Kesimpulan:</strong> Capaian penanganan baru 21,9% dari target. Masih ada <strong>156,69 ton sampah per hari</strong> yang belum tertangani — setara 57.291 ton per tahun dibuang tanpa pengelolaan.</div>
+      </div>
+      <div class="analisis-card">
+        <h3>🗺️ Timbulan per Kecamatan (Top 5)</h3>
+        <div class="bar-wrap"><div class="bar-label"><span>Banawa (37.400 jiwa)</span><span>23,38 ton/hr</span></div><div class="bar-track"><div class="bar-fill green" style="width:100%"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Dampelas (33.000 jiwa)</span><span>20,63 ton/hr</span></div><div class="bar-track"><div class="bar-fill green" style="width:88%"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Banawa Selatan (26.000 jiwa)</span><span>16,25 ton/hr</span></div><div class="bar-track"><div class="bar-fill amber" style="width:69%"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Balaesang (25.800 jiwa)</span><span>16,13 ton/hr</span></div><div class="bar-track"><div class="bar-fill amber" style="width:69%"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Sojol (25.400 jiwa)</span><span>15,88 ton/hr</span></div><div class="bar-track"><div class="bar-fill amber" style="width:68%"></div></div></div>
+        <div class="analisis-note"><strong>Prioritas ekspansi:</strong> Kecamatan Dampelas, Balaesang, dan Sojol menghasilkan timbulan besar namun <strong>belum masuk wilayah layanan aktif</strong> dan harus menjadi prioritas perluasan.</div>
+      </div>
+    </div>
+    <div class="gap-grid">
+      <div class="gap-card"><div class="icon-wrap red">⚡</div><h4>Cakupan Sangat Rendah</h4><p>Hanya 14,33% penduduk terlayani. 264.572 jiwa dan 10 kecamatan belum terjangkau layanan persampahan.</p><span class="gap-badge kritis">Kritis</span></div>
+      <div class="gap-card"><div class="icon-wrap red">🚛</div><h4>Armada Tidak Mencukupi</h4><p>Kapasitas angkut hanya 120 m³/hari. Buldozer TPA rusak berat, 22 gerobak tidak beroperasi, 6 armada rusak.</p><span class="gap-badge kritis">Kritis</span></div>
+      <div class="gap-card"><div class="icon-wrap red">🏭</div><h4>TPA Hampir Penuh</h4><p>TPA Kabonga hanya tersisa 1 blok aktif (0,50 Ha). Tanpa perluasan segera, kapasitas TPA akan habis.</p><span class="gap-badge kritis">Kritis</span></div>
+      <div class="gap-card"><div class="icon-wrap amber">♻️</div><h4>Fasilitas Daur Ulang Minim</h4><p>Hanya 2,93 ton/hari (1,53%) yang diolah dari 192,69 ton timbulan. BSU dan TPS 3R sangat kurang.</p><span class="gap-badge sedang">Perlu Penguatan</span></div>
+      <div class="gap-card"><div class="icon-wrap amber">💰</div><h4>Anggaran Sangat Terbatas</h4><p>Anggaran sampah hanya Rp1,4 Miliar (0,09% APBD). Tidak sebanding dengan kebutuhan layanan kabupaten.</p><span class="gap-badge sedang">Perlu Penguatan</span></div>
+      <div class="gap-card"><div class="icon-wrap amber">📋</div><h4>Retribusi Belum Optimal</h4><p>Target retribusi Rp90 Juta belum tercapai. Kesadaran masyarakat membayar retribusi masih sangat rendah.</p><span class="gap-badge sedang">Perlu Penguatan</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- DAMPAK KESEHATAN -->
+<section id="kesehatan" class="kesehatan-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag red">Dampak Kesehatan</span>
+      <h2>Potensi Penyakit dari Timbulan Sampah</h2>
+      <p>Dengan 156,69 ton sampah tak tertangani setiap hari, risiko penyakit berbasis sampah di Donggala sangat tinggi.</p>
+    </div>
+    <div class="dampak-box">
+      <div class="dampak-item"><div class="angka">156,69 t</div><div class="desc">Sampah tidak tertangani per hari — sumber utama vektor penyakit</div></div>
+      <div class="dampak-item"><div class="angka">81,2%</div><div class="desc">Persentase sampah tidak terkelola dari total timbulan harian</div></div>
+      <div class="dampak-item"><div class="angka">264.572</div><div class="desc">Jiwa belum terlayani — sangat rentan risiko lingkungan dan penyakit</div></div>
+    </div>
+    <div class="penyakit-grid">
+      <div class="penyakit-card"><span class="risk tinggi">Risiko Tinggi</span><h4>🦟 Demam Berdarah Dengue</h4><p>Plastik dan kaleng bekas menampung air hujan — tempat berkembangbiak nyamuk Aedes aegypti. Tumpukan sampah liar meningkatkan risiko KLB DBD.</p><div class="vektor">Vektor: Nyamuk Aedes aegypti</div></div>
+      <div class="penyakit-card"><span class="risk tinggi">Risiko Tinggi</span><h4>🦟 Malaria</h4><p>Genangan di sekitar tumpukan sampah menjadi habitat nyamuk Anopheles. Wilayah pesisir dan pegunungan Donggala berisiko tinggi.</p><div class="vektor">Vektor: Nyamuk Anopheles</div></div>
+      <div class="penyakit-card"><span class="risk tinggi">Risiko Tinggi</span><h4>🐀 Leptospirosis</h4><p>Sampah organik membusuk menarik tikus sebagai reservoir bakteri Leptospira. Banjir membawa lindi mencemari sumber air warga.</p><div class="vektor">Vektor: Tikus, Air tercemar</div></div>
+      <div class="penyakit-card medium"><span class="risk sedang">Risiko Sedang</span><h4>💧 Diare & Kolera</h4><p>Lindi sampah meresap ke tanah dan mencemari sumur warga. Anak-anak dan lansia paling rentan mengalami diare akut.</p><div class="vektor" style="color:var(--orange);">Jalur: Air & Makanan tercemar</div></div>
+      <div class="penyakit-card medium"><span class="risk sedang">Risiko Sedang</span><h4>🫁 ISPA</h4><p>Pembakaran sampah sembarangan menghasilkan partikel berbahaya dan dioksin. Asap TPA atau tumpukan liar memperburuk udara lokal.</p><div class="vektor" style="color:var(--orange);">Jalur: Udara & Asap pembakaran</div></div>
+      <div class="penyakit-card low"><span class="risk rendah">Risiko Sedang</span><h4>🐛 Kecacingan & Hepatitis A</h4><p>Tanah dan air tercemar sampah mengkontaminasi rantai makanan. Anak yang bermain di area sampah rentan infeksi cacing dan Hepatitis A.</p><div class="vektor" style="color:var(--amber);">Jalur: Tanah & Kontak langsung</div></div>
+    </div>
+    <div class="rekomendasi-box">
+      <h3>⚕️ Rekomendasi Penanganan Kesehatan Lingkungan</h3>
+      <div class="rek-grid">
+        <div class="rek-col"><h4>Jangka Pendek (2025)</h4><ul><li>PSN di titik tumpukan sampah liar</li><li>Periksa kualitas air sumur sekitar TPS</li><li>Edukasi larangan bakar sampah</li><li>Kolaborasi surveilans dengan Dinkes</li></ul></div>
+        <div class="rek-col"><h4>Jangka Menengah (2026–2027)</h4><ul><li>Bangun TPS 3R di 10 titik prioritas</li><li>Perkuat sistem IPAL lindi TPA Kabonga</li><li>Integrasi data kesehatan-lingkungan</li><li>Peta risiko penyakit berbasis sampah</li></ul></div>
+        <div class="rek-col"><h4>Jangka Panjang (2028–2029)</h4><ul><li>Perluas layanan ke 16 kecamatan</li><li>Bangun sel TPA baru / TPA regional</li><li>Sistem monitoring kualitas air & udara</li><li>Zero open dumping di semua wilayah</li></ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SARPRAS -->
+<section id="sarpras" class="sarpras-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag orange">Sarana & Prasarana</span>
+      <h2>Kondisi & Kebutuhan Sarpras Persampahan</h2>
+      <p>Inventarisasi armada eksisting dan kebutuhan mendesak untuk peningkatan layanan pengelolaan sampah Kab. Donggala.</p>
+    </div>
+    <h3 style="font-weight:700;color:var(--green-deep);margin-bottom:14px;font-size:0.95rem;">🚛 Kondisi Armada Eksisting (2025)</h3>
+    <div style="overflow-x:auto;margin-bottom:36px;">
+      <table class="sarpras-table">
+        <thead><tr><th>Jenis Alat Angkut</th><th>Total Unit</th><th>Kapasitas</th><th>Aktif</th><th>Rusak Berat</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Gerobak Sampah</td><td>22</td><td>2,0 m³</td><td>0</td><td>22</td><td><span class="badge-kurang">Tidak Beroperasi</span></td></tr>
+          <tr><td>Motor Roda 3</td><td>14</td><td>1,2 m³</td><td>10</td><td>4</td><td><span class="badge-ada">10 Unit Aktif</span></td></tr>
+          <tr><td>Dump Truck</td><td>6</td><td>6,0 m³</td><td>4</td><td>2</td><td><span class="badge-ada">4 Unit Aktif</span></td></tr>
+          <tr><td>Arm Roll Truck</td><td>4</td><td>6,0 m³</td><td>3</td><td>1</td><td><span class="badge-ada">3 Unit Aktif</span></td></tr>
+          <tr><td>Mobil Sampah Mini</td><td>3</td><td>4,0 m³</td><td>3</td><td>0</td><td><span class="badge-ada">3 Unit Aktif</span></td></tr>
+          <tr><td>Bak Kontainer</td><td>12</td><td>6,0 m³</td><td>10</td><td>2</td><td><span class="badge-ada">10 Unit Aktif</span></td></tr>
+          <tr><td>Truck Compactor</td><td>0</td><td>–</td><td>0</td><td>–</td><td><span class="badge-tdk">Belum Ada</span></td></tr>
+          <tr><td>Excavator (TPA)</td><td>2</td><td>–</td><td>2</td><td>0</td><td><span class="badge-ada">2 Unit Aktif</span></td></tr>
+          <tr><td>Buldozer (TPA)</td><td>1</td><td>–</td><td>0</td><td>1</td><td><span class="badge-kurang">Rusak Berat</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3 style="font-weight:700;color:var(--green-deep);margin-bottom:18px;font-size:0.95rem;">🎯 Kebutuhan Sarpras Peta Jalan 2025–2029</h3>
+    <div class="kebutuhan-grid">
+      <div class="kebutuhan-card urgent">
+        <h4>🔴 Mendesak 2025</h4>
+        <ul>
+          <li>Perbaikan Buldozer TPA Kabonga</li>
+          <li>Peremajaan 4 Motor Roda 3 rusak berat</li>
+          <li>Perbaikan 22 Gerobak Sampah</li>
+          <li>Pengadaan 1 unit Truck Compactor</li>
+          <li>Pembangunan 2 TPS 3R baru</li>
+          <li>Penguatan IPAL Lindi TPA</li>
+        </ul>
+      </div>
+      <div class="kebutuhan-card penting">
+        <h4>🟠 Penting 2026–2027</h4>
+        <ul>
+          <li>3 unit Bank Sampah Unit baru</li>
+          <li>4–6 TPS 3R di kecamatan prioritas</li>
+          <li>Rumah Manggot pengolahan organik</li>
+          <li>5 unit Motor Roda 3 untuk wilayah baru</li>
+          <li>Perluasan sel TPA Kabonga (2,30 Ha)</li>
+          <li>Sarana pengolahan Firolisis plastik</li>
+        </ul>
+      </div>
+      <div class="kebutuhan-card rencana">
+        <h4>🟢 Rencana 2028–2029</h4>
+        <ul>
+          <li>Target 20 BSU dan 8 BSI</li>
+          <li>10–13 TPS 3R seluruh wilayah</li>
+          <li>BLUD Persampahan mandiri</li>
+          <li>Layanan ke 16 kecamatan (100 ton/hari)</li>
+          <li>Kolaborasi CSR dunia usaha</li>
+          <li>Digitalisasi armada & monitoring TPA</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JADWAL -->
+<section id="jadwal" class="jadwal-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Jadwal Angkut</span>
+      <h2>Jadwal Pengangkutan Sampah</h2>
+      <p>Layanan dua sesi per hari, Senin–Sabtu. Siapkan sampah sebelum jadwal tiba.</p>
+    </div>
+    <div class="jadwal-grid">
+      <div class="jadwal-day active"><div class="day-name">Sen</div><span class="day-icon">🚛</span><div class="day-type">Pagi & Sore</div></div>
+      <div class="jadwal-day active"><div class="day-name">Sel</div><span class="day-icon">🚛</span><div class="day-type">Pagi & Sore</div></div>
+      <div class="jadwal-day active"><div class="day-name">Rab</div><span class="day-icon">🚛</span><div class="day-type">Pagi & Sore</div></div>
+      <div class="jadwal-day active"><div class="day-name">Kam</div><span class="day-icon">🚛</span><div class="day-type">Pagi & Sore</div></div>
+      <div class="jadwal-day active"><div class="day-name">Jum</div><span class="day-icon">🚛</span><div class="day-type">Pagi & Sore</div></div>
+      <div class="jadwal-day active"><div class="day-name">Sab</div><span class="day-icon">🚛</span><div class="day-type">Pagi & Sore</div></div>
+      <div class="jadwal-day"><div class="day-name">Min</div><span class="day-icon">🚫</span><div class="day-type">Libur</div></div>
+    </div>
+    <div class="jadwal-info">
+      <div class="info-card"><div class="info-icon">🌅</div><div><h4>Pagi</h4><p><strong>06.00 – 08.00 WITA</strong>. Taruh sampah di depan rumah sebelum 06.00 WITA.</p></div></div>
+      <div class="info-card"><div class="info-icon">🌇</div><div><h4>Sore</h4><p><strong>16.00 – 18.00 WITA</strong>. Rute yang sama dengan sesi pagi hari.</p></div></div>
+      <div class="info-card"><div class="info-icon">🚪</div><div><h4>Door to Door</h4><p>Armada langsung mengambil dari sumber rumah ke rumah (SNI 19.2454-2002).</p></div></div>
+      <div class="info-card"><div class="info-icon">📦</div><div><h4>Sistem Kontainer</h4><p>10 bak kontainer aktif di titik-titik strategis wilayah pelayanan.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- JENIS SAMPAH -->
+<section id="jenis" style="background:white;">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Edukasi Pilah Sampah</span>
+      <h2>Jenis Sampah & Cara Penanganannya</h2>
+      <p>Pilah sampah dari rumah — kontribusi nyata mengurangi 156 ton sampah yang belum tertangani setiap hari di Donggala.</p>
+    </div>
+    <div class="jenis-grid">
+      <div class="jenis-card organik"><div class="jenis-icon">🥦</div><h3>Sampah Organik</h3><p>Mudah terurai. Setor ke Rumah Kompos DLH untuk dijadikan pupuk bernilai ekonomis.</p><div class="jenis-examples"><span class="tag">Sisa makanan</span><span class="tag">Daun kering</span><span class="tag">Kulit buah</span></div></div>
+      <div class="jenis-card anorganik"><div class="jenis-icon">🧴</div><h3>Sampah Anorganik</h3><p>Sulit terurai. Setor ke Bank Sampah Donggala Jaya (Jl. Samadna, Kel. Kabonga Bajo, Donggala).</p><div class="jenis-examples"><span class="tag">Plastik</span><span class="tag">Kaca</span><span class="tag">Logam</span></div></div>
+      <div class="jenis-card daur-ulang"><div class="jenis-icon">📦</div><h3>Sampah Daur Ulang</h3><p>Dapat diolah di MRF DLH Donggala. Bersihkan kemasan sebelum disetor.</p><div class="jenis-examples"><span class="tag">Kertas</span><span class="tag">Kardus</span><span class="tag">Botol PET</span><span class="tag">Kaleng</span></div></div>
+      <div class="jenis-card b3"><div class="jenis-icon">⚠️</div><h3>Sampah B3</h3><p>Berbahaya dan beracun. Hubungi DLH Donggala untuk penanganan khusus. Jangan buang sembarangan.</p><div class="jenis-examples"><span class="tag">Baterai</span><span class="tag">Obat kadaluarsa</span><span class="tag">Pestisida</span></div></div>
+      <div class="jenis-card residu"><div class="jenis-icon">🗑️</div><h3>Sampah Residu</h3><p>Tidak bisa didaur ulang. Buang saat jadwal pengangkutan untuk dibawa ke TPA Kabonga.</p><div class="jenis-examples"><span class="tag">Pampers</span><span class="tag">Tisu kotor</span><span class="tag">Pembalut</span></div></div>
+      <div class="jenis-card elektronik"><div class="jenis-icon">📱</div><h3>Sampah Elektronik</h3><p>Mengandung logam berat berbahaya. Laporkan ke DLH Donggala via WhatsApp untuk penanganan khusus.</p><div class="jenis-examples"><span class="tag">HP</span><span class="tag">Laptop</span><span class="tag">Kabel</span></div></div>
+    </div>
+    <div style="margin-top:52px;">
+      <div class="section-header" style="margin-bottom:32px;"><h2>4 Langkah Mudah Pilah Sampah</h2></div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><h4>Siapkan 3 Wadah</h4><p>Organik, anorganik/daur ulang, dan residu. Beri label agar seluruh keluarga ikut memilah.</p></div>
+        <div class="step"><div class="step-num">2</div><h4>Pilah Saat Membuang</h4><p>Langsung pisahkan ke wadah tepat — jangan satukan kembali agar tidak mencemari satu sama lain.</p></div>
+        <div class="step"><div class="step-num">3</div><h4>Bersihkan Kemasan</h4><p>Bilas botol dan kaleng sebelum dibuang ke tempat daur ulang atau disetor ke bank sampah.</p></div>
+        <div class="step"><div class="step-num">4</div><h4>Keluarkan Tepat Waktu</h4><p>Depan rumah sebelum 06.00 WITA (pagi) atau 16.00 WITA (sore) pada hari Senin–Sabtu.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAM -->
+<section id="program" style="background:var(--green-pale);">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Program & Inovasi</span>
+      <h2>Program Unggulan DLH Donggala</h2>
+      <p>Program nyata menuju target pengelolaan sampah yang lebih baik di Kabupaten Donggala 2025–2029.</p>
+    </div>
+    <div class="program-grid">
+      <div class="program-card"><span class="icon">🏦</span><h4>Bank Sampah Donggala Jaya</h4><p>BSI + 3 BSU di SMP 1, SMA 1, SMK 1 Banawa. Target 20 BSU pada 2029 di seluruh kecamatan.</p></div>
+      <div class="program-card"><span class="icon">🌱</span><h4>Rumah Kompos & MRF</h4><p>Pengolahan sampah organik menjadi kompos dan fasilitas pemilahan sampah bernilai ekonomis (MRF).</p></div>
+      <div class="program-card"><span class="icon">🏫</span><h4>Sekolah Adiwiyata</h4><p>Sosialisasi dan BSU di calon sekolah Adiwiyata — mencetak generasi muda peduli lingkungan Donggala.</p></div>
+      <div class="program-card"><span class="icon">💰</span><h4>Program TAKE</h4><p>Transfer Anggaran Kabupaten Berbasis Ekologis — insentif finansial bagi desa yang terapkan kebijakan pro-lingkungan.</p></div>
+      <div class="program-card"><span class="icon">🚫</span><h4>Pembatasan Plastik</h4><p>SE pembatasan plastik sekali pakai dan larangan kemasan Styrofoam (PS Foam) di Kabupaten Donggala.</p></div>
+      <div class="program-card"><span class="icon">🤝</span><h4>Gotong Royong & Komunitas</h4><p>Kerja bakti massal rutin dan kolaborasi komunitas (KTH Goneganti, Pokdarwis) bersihkan lingkungan.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAK & FORM WA -->
+<section id="kontak" class="kontak-section">
+  <div class="container">
+    <div class="kontak-grid">
+      <div class="kontak-left">
+        <h2>Lapor Langsung via WhatsApp</h2>
+        <p>Isi form — laporan Anda langsung dikirim ke WhatsApp petugas UPT Persampahan DLH Donggala dan akan ditindaklanjuti segera.</p>
+        <div class="kontak-items">
+          <div class="kontak-item"><div class="kontak-item-icon">📲</div><div><strong>WhatsApp Petugas</strong><span>0853-1932-3427</span></div></div>
+          <div class="kontak-item"><div class="kontak-item-icon">📧</div><div><strong>Email</strong><span>dlh@donggalakab.go.id</span></div></div>
+          <div class="kontak-item"><div class="kontak-item-icon">🏢</div><div><strong>UPT Persampahan DLH</strong><span>Desa Kabonga Besar, Kec. Banawa, Kab. Donggala</span></div></div>
+          <div class="kontak-item"><div class="kontak-item-icon">🌅</div><div><strong>Jadwal Angkut Pagi</strong><span>06.00 – 08.00 WITA · Senin – Sabtu</span></div></div>
+          <div class="kontak-item"><div class="kontak-item-icon">🌇</div><div><strong>Jadwal Angkut Sore</strong><span>16.00 – 18.00 WITA · Senin – Sabtu</span></div></div>
+          <div class="kontak-item"><div class="kontak-item-icon">📋</div><div><strong>Dasar Hukum</strong><span>Perda No. 7/2011 · Perbup No. 1/2019</span></div></div>
+        </div>
+      </div>
+      <div class="kontak-form">
+        <h3>📋 Form Pelaporan — Kirim via WhatsApp</h3>
+        <div class="form-group"><label>Nama Lengkap</label><input type="text" id="nama" placeholder="Masukkan nama Anda"></div>
+        <div class="form-group"><label>Nomor HP</label><input type="tel" id="hp" placeholder="08xx-xxxx-xxxx"></div>
+        <div class="form-group">
+          <label>Kecamatan</label>
+          <select id="kecamatan">
+            <option value="">– Pilih Kecamatan –</option>
+            <option>Banawa</option><option>Banawa Tengah</option><option>Banawa Selatan</option>
+            <option>Labuan</option><option>Tanantovea</option><option>Sindue</option>
+            <option>Dampelas</option><option>Balaesang</option><option>Sojol</option><option>Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Jenis Laporan</label>
+          <select id="jenis_lap">
+            <option value="">– Pilih Jenis Laporan –</option>
+            <option>Tumpukan sampah liar</option>
+            <option>Armada tidak datang</option>
+            <option>TPS penuh / meluap</option>
+            <option>Pencemaran lingkungan</option>
+            <option>Pembuangan sampah B3</option>
+            <option>Pembakaran sampah sembarangan</option>
+            <option>Saran & masukan</option>
+            <option>Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Lokasi Kejadian</label><input type="text" id="lokasi" placeholder="Nama jalan / desa / titik lokasi"></div>
+        <div class="form-group"><label>Keterangan Detail</label><textarea id="keterangan" placeholder="Deskripsikan masalah secara detail..."></textarea></div>
+        <button class="btn-submit" onclick="kirimWA()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Kirim ke WhatsApp Petugas
+        </button>
+        <div class="wa-note">✅ Laporan langsung masuk ke WA petugas DLH dan ditindaklanjuti dalam 1×24 jam</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 <strong>SIPAS – Sistem Informasi Persampahan Kabupaten Donggala</strong></p>
+  <p style="margin-top:4px;">Dinas Lingkungan Hidup Kabupaten Donggala · Provinsi Sulawesi Tengah · WA: 0853-1932-3427</p>
+  <p style="margin-top:4px;font-style:italic;">"Jaga dan Lestarikan Lingkungan Hidup Demi Anak Cucu Kita" 🌿</p>
+</footer>
+
+<script>
+function kirimWA() {
+  const nama = document.getElementById('nama').value.trim();
+  const hp = document.getElementById('hp').value.trim();
+  const kecamatan = document.getElementById('kecamatan').value;
+  const jenis = document.getElementById('jenis_lap').value;
+  const lokasi = document.getElementById('lokasi').value.trim();
+  const keterangan = document.getElementById('keterangan').value.trim();
+
+  if (!nama) { alert('Mohon isi nama lengkap Anda.'); return; }
+  if (!kecamatan) { alert('Mohon pilih kecamatan.'); return; }
+  if (!jenis) { alert('Mohon pilih jenis laporan.'); return; }
+  if (!lokasi) { alert('Mohon isi lokasi kejadian.'); return; }
+
+  const now = new Date();
+  const tanggal = now.toLocaleDateString('id-ID', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const waktu = now.toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'});
+
+  const pesan =
+`*LAPORAN SAMPAH - SIPAS DONGGALA*
+━━━━━━━━━━━━━━━━━━━━━━━━━
+📅 *Tanggal:* ${tanggal}
+⏰ *Waktu:* ${waktu} WITA
+
+👤 *Nama:* ${nama}
+📞 *No. HP:* ${hp || 'tidak diisi'}
+📍 *Kecamatan:* ${kecamatan}
+🚨 *Jenis Laporan:* ${jenis}
+📌 *Lokasi Kejadian:* ${lokasi}
+
+📝 *Keterangan:*
+${keterangan || '(tidak ada keterangan tambahan)'}
+━━━━━━━━━━━━━━━━━━━━━━━━━
+_Dikirim via SIPAS Kabupaten Donggala_
+_DLH Kab. Donggala · dlh@donggalakab.go.id_`;
+
+  const url = 'https://wa.me/6285319323427?text=' + encodeURIComponent(pesan);
+  window.open(url, '_blank');
+}
+</script>
+</body>
+</html>
